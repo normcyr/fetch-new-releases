@@ -50,7 +50,7 @@ def save_data(new_releases, json_filename, text_file):
         f.write(json.dumps(new_releases, sort_keys = True))
 
     with open(text_file, 'w') as f:
-        f.write(tabulate(new_releases, headers = 'keys'))
+        f.write(tabulate(new_releases, headers = 'keys', tablefmt='html'))
 
 
 def main():
