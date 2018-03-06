@@ -54,7 +54,6 @@ def main():
 
     new_releases = []
     date_release = re.findall('\w+', week)[1]
-    print(date_release)
     json_filename = 'new_releases' + date_release + '.json'
 
 
