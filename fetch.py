@@ -4,6 +4,8 @@ from bs4 import BeautifulSoup
 import requests
 import re
 import json
+from tabulate import tabulate
+from collections import OrderedDict
 
 def get_releases_week(base_url):
     homepage = requests.get(base_url).text
@@ -43,9 +45,13 @@ def parse_data(data):
 
     return(record)
 
-def save_data(new_releases, json_filename):
+def save_data(new_releases, json_filename, text_file):
     with open(json_filename, 'w') as f:
-        f.write(json.dumps(new_releases))
+        f.write(json.dumps(new_releases, sort_keys = True))
+
+    with open(text_file, 'w') as f:
+        f.write(tabulate(new_releases, headers = 'keys'))
+
 
 def main():
 
@@ -57,8 +63,7 @@ def main():
     new_releases = []
     date_release = re.findall('\w+', week)[1]
     json_filename = 'new_releases' + date_release + '.json'
-
-
+    text_file = 'new_releases' + date_release + '.html'
 
     releases_page = get_releases_page(base_url, week, payload)
     nb_results, soup = make_soup(releases_page)
@@ -69,7 +74,7 @@ def main():
             record = parse_data(data)
             new_releases.append(record)
 
-    save_data(new_releases, json_filename)
+    save_data(new_releases, json_filename, text_file)
 
 if __name__ == '__main__':
     main()
